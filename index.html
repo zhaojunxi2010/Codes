@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilibili 风格网页示例</title>
+    <style>
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", sans-serif;
+            background-color: #f4f5f7;
+            color: #181818;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background-color: #fff;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FB7299;
+            margin-right: 30px;
+        }
+
+        .nav-links a {
+            margin-right: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .nav-links a:hover {
+            color: #FB7299;
+        }
+
+        /* 搜索框区域 */
+        .search-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box {
+            width: 400px;
+            height: 40px;
+            background-color: #f1f2f3;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding-left: 10px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #e3e5e7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* 用户头像区域 */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 主体内容区域 */
+        .main-container {
+            margin-top: 100px; /* 避开固定定位的头部 */
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        /* 分类标签 */
+        .channel-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .tab-item {
+            padding: 6px 16px;
+            background-color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tab-item:hover {
+            background-color: #e5e9ef;
+        }
+
+        .tab-item.active {
+            background-color: #FB7299;
+            color: #fff;
+        }
+
+        /* 视频网格 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background-color: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background-color: #e7e7e7;
+            position: relative;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-stats {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 10px 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            color: #fff;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .video-info {
+            padding: 10px;
+        }
+
+        .video-title {
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: #181818;
+        }
+
+        .video-meta {
+            font-size: 12px;
+            color: #9499a0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 占位符颜色 */
+        .placeholder-1 { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+        .placeholder-2 { background: linear-gradient(135deg, #ff5f6d 0%, #ffc371 100%); }
+        .placeholder-3 { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .placeholder-4 { background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%); }
+
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="logo">bilibili</div>
+        <nav class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">番剧</a>
+            <a href="#">直播</a>
+            <a href="#">游戏中心</a>
+            <a href="#">会员购</a>
+            <a href="#">漫画</a>
+            <a href="#">赛事</a>
+        </nav>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" placeholder="搜索你感兴趣的内容...">
+                <div class="search-btn">🔍</div>
+            </div>
+        </div>
+
+        <div class="user-actions">
+            <div style="margin-right: 15px; font-size: 14px; color: #666;">投稿</div>
+            <div class="avatar">
+                <!-- 使用占位图 -->
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar">
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="main-container">
+        <!-- 分类标签 -->
+        <div class="channel-tabs">
+            <div class="tab-item active">推荐</div>
+            <div class="tab-item">热门</div>
+            <div class="tab-item">番剧</div>
+            <div class="tab-item">国创</div>
+            <div class="tab-item">综艺</div>
+            <div class="tab-item">动画</div>
+            <div class="tab-item">鬼畜</div>
+            <div class="tab-item">舞蹈</div>
+            <div class="tab-item">娱乐</div>
+            <div class="tab-item">科技</div>
+            <div class="tab-item">美食</div>
+            <div class="tab-item">汽车</div>
+            <div class="tab-item">运动</div>
+        </div>
+
+        <!-- 视频列表 -->
+        <div class="video-grid">
+            <!-- 卡片 1 -->
+            <div class="video-card">
+                <div class="video-thumbnail placeholder-1">
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 100.7万</span>
+                        <span>💬 1866</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">【断网补全计划】大头瓶盖饮料设计缺陷，无方向盘时代来临</div>
+                    <div class="video-meta">
+                        <span>瞎问虾猜</span>
+                        <span>05-01</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 2 -->
+            <div class="video-card">
+                <div class="video-thumbnail placeholder-2">
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 3.8万</span>
+                        <span>💬 118</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">你还记得这种电池吗？金霸王电量检测电池，绝妙设计</div>
+                    <div class="video-meta">
+                        <span>黑纹白斑马</span>
+                        <span>04-29</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 3 -->
+            <div class="video-card">
+                <div class="video-thumbnail placeholder-3">
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 4.2万</span>
+                        <span>💬 11</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">WebRTC 泄漏：挂着美国服务器，对方却能看到你在中国哪座城市</div>
+                    <div class="video-meta">
+                        <span>无人知晓的Luke</span>
+                        <span>昨天</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 卡片 4 -->
+            <div class="video-card">
+                <div class="video-thumbnail placeholder-4">
+                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 7.8万</span>
+                        <span>💬 146</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">教你解锁！进化版浏览器，体验提升200%！还能这么玩？</div>
+                    <div class="video-meta">
+                        <span>系统迷</span>
+                        <span>04-16</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 重复卡片用于演示布局 -->
+            <div class="video-card">
+                <div class="video-thumbnail placeholder-1">
+                     <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 126万</span>
+                        <span>💬 26</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">循环歌单 |《雷霆特写の小曲》《海绵宝宝の小曲》Versatile</div>
+                    <div class="video-meta">
+                        <span>XFinds寻宝</span>
+                        <span>昨天</span>
+                    </div>
+                </div>
+            </div>
+
+             <div class="video-card">
+                <div class="video-thumbnail placeholder-2">
+                     <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white; font-size:24px; font-weight:bold;">
+                        视频封面
+                    </div>
+                    <div class="video-stats">
+                        <span>▶ 353</span>
+                        <span>💬 2</span>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">【roblox/evade/jard中心】I want things to be beautiful meme</div>
+                    <div class="video-meta">
+                        <span>sprite-思普瑞特</span>
+                        <span>昨天</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
